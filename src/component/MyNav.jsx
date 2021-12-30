@@ -1,36 +1,42 @@
 import { Navbar, Nav, Button, Modal, Form, Col, InputGroup, FormControl} from "react-bootstrap";
 import { useState } from "react";
+import UserForm from '../component/UserForm'
+
 
 
 
 const MyNavbar = () => { 
     const [show, setShow] = useState(false);
-    const [firstName, setFirstName] = useState("")
-    
-    const [lastName, setLastName] = useState("")
-    const [email, setEmail] = useState("")
-    const [phone, setPhone] = useState("")
-    const [username, setUserName] = useState("")
-    const [password, setPassword] = useState("")
-    const [isHost, setIsHost] = useState("")
+    const [showH, setShowH] = useState(false);
+    const [newUser, setNewUser] = useState({})
+    const [newHouse, setNewHouse] = useState({})
 
 
-    const newUser = {
-        firstName: '{firstName}',
-        lastName: '{lastName}',
-        email: '{email}',
-        phone: {phone},
-        username: "{username}",
-        password: "{password}",
-        isHost:"{isHost}"
+    const handleChange = (event) => {
+        event.preventDefault()
+        const name = event.target.name;
+        const value = event.target.value;
+        setNewUser(v => ({ ...v, [name]: value }))
     }
+const handleChangeHouse = (event) => {
+        event.preventDefault()
+        const name = event.target.name;
+        const value = event.target.value;
+        setNewHouse(v => ({ ...v, [name]: value }))
+    }
+
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-  const addUser = async () => {
+const handleCloseH = () => setShowH(false);
+    const handleShowH = () => setShowH(true);
+
+
+
+    const addUser = async (e) => {
+      e.preventDefault()
     try {
-        const res = await fetch(`http://localhost:3001/city/${id}`,
-            
+        const res = await fetch(`http://localhost:3001/user`,
             { 
                 method: "POST",
                 body: JSON.stringify(newUser),
@@ -43,8 +49,30 @@ const MyNavbar = () => {
     console.log("server error");
   }
 }
-      
     
+    
+ const addHouse = async (e) => {
+      e.preventDefault()
+    try {
+        const res = await fetch(`http://localhost:3001/house`,
+            { 
+                method: "POST",
+                body: JSON.stringify(newHouse),
+                headers: {'Content-Type': "application/json"}
+            });
+                return res.text()
+  } catch (error) {
+    console.log("server error");
+  }
+}
+    
+    
+    const checkIsValid = async (e) => {
+        e.preventDefault()
+        if (e.IsValid == true) {
+            setIsHost==true
+        }
+ }   
 
    return (
         <Navbar bg="light" expand="lg">
@@ -57,19 +85,19 @@ const MyNavbar = () => {
        </Nav>
             </Navbar.Collapse>
            <Button onClick={handleShow}>Become a Host</Button>
+           
 
 
-           {/* **************   MODAL FORM *************************/}
+           {/* **************   MODAL FORM User*************************/}
            <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Fill the form</Modal.Title>
         </Modal.Header>
         <Modal.Body>
 <div>
-                   
-            <Form>
-  {/* <Form.Row className="align-items-center"> */}
-    <Col xs="auto">
+                       {/* <UserForm user={ newUser}/> */}
+            <Form onSubmit={addUser}>
+      <Col xs="auto">
       <Form.Label htmlFor="inlineFormInput" srOnly>
         Name
       </Form.Label>
@@ -77,6 +105,9 @@ const MyNavbar = () => {
         className="mb-2"
         id="inlineFormInput"
         placeholder="Name"
+        name="firstName"
+        value={newUser.firstName}
+        onChange={handleChange}
       />
     </Col>
     <Col xs="auto">
@@ -86,7 +117,10 @@ const MyNavbar = () => {
       <Form.Control
         className="mb-2"
         id="inlineFormInput"
-        placeholder="lastname"
+        placeholder="Lastname"
+        name="lastName"
+        value={newUser.lastName}
+        onChange={handleChange}
       />
     </Col>
     <Col xs="auto">
@@ -97,10 +131,13 @@ const MyNavbar = () => {
         className="mb-2"
         id="inlineFormInput"
         placeholder="email"
+        name="email"
+        value={newUser.email}
+        onChange={handleChange}
       />
-    </Col>
+</Col>
 
-                           <Col xs="auto">
+<Col xs="auto">
       <Form.Label htmlFor="inlineFormInput" srOnly>
         Phone number
       </Form.Label>
@@ -108,8 +145,11 @@ const MyNavbar = () => {
         className="mb-2"
         id="inlineFormInput"
         placeholder="Phone"
+        name="phone"
+        value={newUser.phone}
+        onChange={handleChange}
       />
-                           </Col>
+</Col>
 
 <Col xs="auto">
       <Form.Label htmlFor="inlineFormInput" srOnly>
@@ -119,8 +159,11 @@ const MyNavbar = () => {
         className="mb-2"
         id="inlineFormInput"
         placeholder="Choise a username"
+        name="username"
+        value={newUser.username}
+        onChange={handleChange}
       />
-                           </Col>
+</Col>
 
 
 <Col xs="auto">
@@ -132,6 +175,9 @@ const MyNavbar = () => {
         id="inlineFormInput"
         placeholder="*****"
         type="password"
+        name="password"
+        value={newUser.password}
+        onChange={handleChange}  
       />
     </Col>
 
@@ -141,15 +187,18 @@ const MyNavbar = () => {
         id="autoSizingCheck"
         className="mb-2"
         label="IsHost"
+        name="isHost"
+        value={newUser.isHost}
+        onChange={handleChange}
       />
     </Col>
     <Col xs="auto">
-      <Button type="submit" className="mb-2">
+      <Button type="submit" className="mb-2" onClick={addUser, handleClose}>
         Submit
       </Button>
     </Col>
   {/* </Form.Row> */}
-</Form>
+</Form>  
               </div>     
         </Modal.Body>
         <Modal.Footer>
@@ -161,7 +210,119 @@ const MyNavbar = () => {
           </Button>
         </Modal.Footer>
            </Modal>
-           {/**************** END MODAL ***********************/}
+           {/**************** END MODAL User***********************/}
+<Button variant="outline-success" className="ml-3" onClick={handleShowH}>Add a new house</Button>
+           
+
+{/* **************   MODAL FORM House*************************/}
+           <Modal show={showH} onHide={handleCloseH}>
+        <Modal.Header closeButton>
+          <Modal.Title>Fill the form</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+<div>
+                       {/* <UserForm user={ newUser}/> */}
+            <Form onSubmit={addHouse}>
+      <Col xs="auto">
+      <Form.Label htmlFor="inlineFormInput" srOnly>
+        Title
+      </Form.Label>
+      <Form.Control
+        className="mb-2"
+        id="inlineFormInput"
+        placeholder="title"
+        name="title"
+        value={newHouse.title}
+        onChange={handleChangeHouse}
+      />
+    </Col>
+    <Col xs="auto">
+      <Form.Label htmlFor="inlineFormInput" srOnly>
+        Description
+      </Form.Label>
+      <Form.Control
+        className="mb-2"
+        id="inlineFormInput"
+        placeholder="description"
+        name="description"
+        value={newHouse.description}
+        onChange={handleChangeHouse}
+      />
+    </Col>
+    <Col xs="auto">
+      <Form.Label htmlFor="inlineFormInput" srOnly>
+        Rate
+      </Form.Label>
+      <Form.Control
+        className="mb-2"
+        id="inlineFormInput"
+        placeholder="rate"
+        name="rate"
+        value={newHouse.rate}
+        onChange={handleChangeHouse}
+      />
+</Col>
+
+<Col xs="auto">
+      <Form.Label htmlFor="inlineFormInput" srOnly>
+        Rooms
+      </Form.Label>
+      <Form.Control
+        className="mb-2"
+        id="inlineFormInput"
+        placeholder="Rooms"
+        name="rooms"
+        value={newHouse.rooms}
+        onChange={handleChangeHouse}
+      />
+</Col>
+
+<Col xs="auto">
+      <Form.Label htmlFor="inlineFormInput" srOnly>
+        Max Hosts number
+      </Form.Label>
+      <Form.Control
+        className="mb-2"
+        id="inlineFormInput"
+        placeholder="Max hosts number"
+        name="max_host_num"
+        value={newHouse.max_host_num}
+        onChange={handleChangeHouse}
+      />
+</Col>
+
+
+    {/* <Col xs="auto">
+      <Form.Check
+        type="checkbox"
+        id="autoSizingCheck"
+        className="mb-2"
+        label="IsHost"
+        name="isHost"
+        value={newUser.isHost}
+        onChange={handleChange}
+      />
+    </Col> */}
+    <Col xs="auto">
+      <Button type="submit" className="mb-2" onClick={addHouse, handleCloseH}>
+        Submit
+      </Button>
+    </Col>
+  {/* </Form.Row> */}
+</Form>  
+              </div>     
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseH}>
+            Close
+          </Button>
+          
+        </Modal.Footer>
+           </Modal>
+           {/**************** END MODAL House***********************/}
+
+
+
 
        </Navbar>
        
