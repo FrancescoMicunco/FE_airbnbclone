@@ -67,10 +67,12 @@ const getCities = async () => {
  }
 
   
-const getHouseId = async (id) => {
-    try {
-      if (id) {
-        const res = await fetch(`http://localhost:3001/city/${id}`);
+const getHouseId = async () => {
+  try {
+    const cityId = { id }
+    console.log("this is city Id", cityId)
+      if (cityId!==0) {
+        const res = await fetch(`http://localhost:3001/city/${cityId.id}`);
         if (res.ok) {
           const data = await res.json();
           console.log(data);
