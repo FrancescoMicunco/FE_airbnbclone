@@ -92,12 +92,12 @@ useEffect(()=>{},[city])
       
       <Container>
         <Row className="d-flex">
-          <Col xs={12} md={9} className="xs-mt-3">
+          <Col xs={12}  className="xs-mt-3">
             <Row>
             {
               city.map(e => e.Houses.map(h => (
-              <Col md={4}>
-                  <Card >
+              <Col md={3}>
+                  <Card className="mb-4">
                     <Card.Img variant="top" src={h.image1url} />
                     <Card.Body>
                       <Card.Title>{ h.title}</Card.Title>
