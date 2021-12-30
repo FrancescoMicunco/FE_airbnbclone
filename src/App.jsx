@@ -10,11 +10,12 @@ import MyNavbar from '../src/component/MyNav'
 function App() {
 
   const [city, setCity] = useState([])
-  const [cities, setSelected] = useState('')
+  const [selected, setSelected] = useState(false)
   const [date, setDate] = useState('')
+  const [id, setId]=useState('')
 
   
-const deleteCity = async (id) => {
+const deleteCity = async ({id}) => {
     try {
     const res = await fetch(`http://localhost:3001/city/${id}`);
     if (res.ok) {
@@ -27,7 +28,7 @@ const deleteCity = async (id) => {
   }
   }
   
-const getCity = async (id) => {
+const getCity = async ({id}) => {
     try {
     const res = await fetch(`http://localhost:3001/city/${id}`);
     if (res.ok) {
@@ -53,8 +54,20 @@ const getCities = async () => {
   }
   };
   
+
+  const handelCityId = (e) => {
+    e.preventDefault();
+    setSelected(true)
+    const citieSelected = city.find(c => c.name === e.target.value)
+    if (citieSelected) {
+      console.log(citieSelected.id)
+      setId(citieSelected)
+      console.log(id.id)
+    }
+ }
+
+  
 const getHouseId = async (id) => {
-    
     try {
       if (id) {
         const res = await fetch(`http://localhost:3001/city/${id}`);
@@ -89,7 +102,17 @@ useEffect(()=>{},[city])
     <>
       <MyNavbar props={city}/>
       <h1>Welcome in Clone<span style={{ color: "white" }}>Air</span>BnB</h1>
-      
+      <div style={{ display: "inline-block" }}>
+        <InputGroup className="mb-3">
+        <FormControl
+            placeholder="search a city"
+            aria-label="Search"
+            aria-describedby="basic-addon1"
+            value={city.id}
+            onChange={handelCityId}
+        />
+        </InputGroup>
+      </div>
       <Container>
         <Row className="d-flex">
           <Col xs={12}  className="xs-mt-3">
@@ -101,14 +124,14 @@ useEffect(()=>{},[city])
                     <Card.Img variant="top" src={h.image1url} />
                     <Card.Body>
                       <Card.Title>{ h.title}</Card.Title>
-                        <Card.Subtitle className="mb-2 text-muted"></Card.Subtitle>
+                      <Card.Subtitle className="mb-2 text-muted">{e.name }</Card.Subtitle>
                         <Card.Text>{ h.description}</Card.Text>
                         <Card.Text>rate {h.rate}</Card.Text>
                         <Card.Link href="#">Show more</Card.Link>
                         <Card.Link href="#">Another Link</Card.Link>
                     </Card.Body>
                   </Card>
-               </Col>)
+              </Col>)
               ))
             }
             </Row>
