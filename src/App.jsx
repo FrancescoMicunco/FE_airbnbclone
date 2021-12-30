@@ -98,11 +98,12 @@ useEffect(()=>{},[city])
               city.map(e => e.Houses.map(h => (
               <Col md={4}>
                   <Card >
+                    <Card.Img variant="top" src={h.image1url} />
                     <Card.Body>
                       <Card.Title>{ h.title}</Card.Title>
                         <Card.Subtitle className="mb-2 text-muted"></Card.Subtitle>
                         <Card.Text>{ h.description}</Card.Text>
-                        <Card.Text>rate { h.rate}</Card.Text>
+                        <Card.Text>rate {h.rate}</Card.Text>
                         <Card.Link href="#">Show more</Card.Link>
                         <Card.Link href="#">Another Link</Card.Link>
                     </Card.Body>
