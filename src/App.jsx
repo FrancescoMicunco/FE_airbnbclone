@@ -4,16 +4,17 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Route, Routes, BrowserRouter } from "react-router-dom";
 import { Row, Col, FormControl, InputGroup, Button, Container, Card } from "react-bootstrap";
 import { useEffect, useState } from "react";
-import Home from '../src/component/Home'
+import Home from '../src/component/Home';
+import MyNavbar from '../src/component/MyNav'
 
 function App() {
 
   const [city, setCity] = useState([])
   const [cities, setSelected] = useState('')
-const [date, setDate] = useState('')
+  const [date, setDate] = useState('')
 
   
-  const deleteCity = async (id) => {
+const deleteCity = async (id) => {
     try {
     const res = await fetch(`http://localhost:3001/city/${id}`);
     if (res.ok) {
@@ -26,7 +27,7 @@ const [date, setDate] = useState('')
   }
   }
   
-const addCity = async (id) => {
+const getCity = async (id) => {
     try {
     const res = await fetch(`http://localhost:3001/city/${id}`);
     if (res.ok) {
@@ -37,7 +38,7 @@ const addCity = async (id) => {
   } catch (error) {
     console.log("server error");
   }
-  }
+}
   
 const getCities = async () => {
   try {
@@ -52,7 +53,7 @@ const getCities = async () => {
   }
   };
   
-  const getHouseId = async (id) => {
+const getHouseId = async (id) => {
     
     try {
       if (id) {
@@ -82,11 +83,13 @@ useEffect(()=>{
   // getCities()
 }, [])
      
-  useEffect(()=>{},[city])
+useEffect(()=>{},[city])
+  
   return (
     <>
+      <MyNavbar props={city}/>
       <h1>Welcome in Clone<span style={{ color: "white" }}>Air</span>BnB</h1>
-      <Button>Become a Host</Button>
+      
       <Container>
         <Row className="d-flex">
           <Col xs={12} md={9} className="xs-mt-3">
