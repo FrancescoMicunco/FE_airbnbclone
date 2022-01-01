@@ -5,7 +5,8 @@ import { Route, Routes, BrowserRouter } from "react-router-dom";
 import { Form, Row, Col, FormControl, InputGroup, Button, Container, Card } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import Home from '../src/component/Home';
-import MyNavbar from '../src/component/MyNav'
+import MyNavbar from '../src/component/MyNav';
+import {useSearchParams} from 'react-router-dom'
 
 function App() {
 
@@ -13,7 +14,9 @@ function App() {
   const [house, setHouse] = useState([])
   const [selected, setSelected] = useState(false)
   const [date, setDate] = useState('')
-  const [cityId, setCityId]=useState('')
+  const [cityId, setCityId] = useState('');
+  const [query, setQuery] = useState(null);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   
 const deleteCity = async ({id}) => {
@@ -50,8 +53,6 @@ const getCities = async () => {
     const citieSelected = city.find(c => c.name === e.target.value)
     console.log("cityselected", citieSelected.id)
     setCityId(citieSelected.id)
-    
-      
     }
  
 
@@ -112,7 +113,8 @@ useEffect(()=>{},[house])
                 <div key={`Cooking set`} className="mb-3 d-inline-flex">
                     <Form.Check 
                         type={"checkbox"}
-                        label={`Cooking set`}
+                      label={`Cooking set`}
+                      onChange={e=>console.log(e.target.checked)}
                     />
                   </div>
                   
